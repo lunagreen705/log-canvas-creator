@@ -5,7 +5,7 @@ import path from "path";
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   // ⚠️ 設定 GitHub Pages 的 base 路徑，與你的 repo 名稱大小寫一致
-  base: process.env.NODE_ENV === "production" ? "/TRPG-Log-Canvas/" : "/",
+  base: process.env.NODE_ENV === "production" ? "/log-canvas-creator/" : "/",
   
   server: {
     host: "::",
