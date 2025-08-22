@@ -1,3 +1,4 @@
+
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -14,11 +15,11 @@ export function LogCanvas({}: LogCanvasProps) {
   const [processedOutput, setProcessedOutput] = useState("");
 
   const categories = [
-    { id: "online", name: "在线图片", icon: <Image size={16} />, color: "online" as const },
-    { id: "framework", name: "框架代码", icon: <Code size={16} />, color: "framework" as const },
-    { id: "ooc", name: "场外发言", icon: <MessageSquare size={16} />, color: "ooc" as const },
-    { id: "time", name: "发言时间", icon: <Clock size={16} />, color: "time" as const },
-    { id: "dice", name: "骰指令", icon: <Dice6 size={16} />, color: "dice" as const },
+    { id: "online", name: "🖼️ 線上圖片", icon: <Image size={16} />, color: "online" as const },
+    { id: "framework", name: "⚡ 框架代碼", icon: <Code size={16} />, color: "framework" as const },
+    { id: "ooc", name: "💭 場外發言", icon: <MessageSquare size={16} />, color: "ooc" as const },
+    { id: "time", name: "🕐 發言時間", icon: <Clock size={16} />, color: "time" as const },
+    { id: "dice", name: "🎲 骰子指令", icon: <Dice6 size={16} />, color: "dice" as const },
   ];
 
   const toggleCategory = (categoryId: string) => {
@@ -32,8 +33,8 @@ export function LogCanvas({}: LogCanvasProps) {
   const processLog = () => {
     if (!inputText.trim()) {
       toast({
-        title: "请输入日志内容",
-        description: "请在输入框中输入需要格式化的跑团记录",
+        title: "🔮 請輸入日誌內容",
+        description: "請在輸入框中輸入需要格式化的跑團記錄",
         variant: "destructive",
       });
       return;
@@ -56,8 +57,8 @@ export function LogCanvas({}: LogCanvasProps) {
     
     setProcessedOutput(processed);
     toast({
-      title: "处理完成",
-      description: "日志已成功格式化",
+      title: "✨ 處理完成",
+      description: "日誌已成功格式化，充滿神聖光輝",
     });
   };
 
@@ -65,13 +66,13 @@ export function LogCanvas({}: LogCanvasProps) {
     try {
       await navigator.clipboard.writeText(processedOutput);
       toast({
-        title: "复制成功",
-        description: "格式化结果已复制到剪贴板",
+        title: "📋 複製成功",
+        description: "格式化結果已複製到剪貼板",
       });
     } catch (error) {
       toast({
-        title: "复制失败",
-        description: "无法复制到剪贴板，请手动复制",
+        title: "⚠️ 複製失敗",
+        description: "無法複製到剪貼板，請手動複製",
         variant: "destructive",
       });
     }
@@ -82,33 +83,54 @@ export function LogCanvas({}: LogCanvasProps) {
     setProcessedOutput("");
     setActiveCategories([]);
     toast({
-      title: "已清空",
-      description: "所有内容已清除",
+      title: "🧹 已清空",
+      description: "所有內容已清除，回歸虛無",
     });
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full relative">
+      {/* Mystical connecting line */}
+      <div className="hidden lg:block absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-px h-32 bg-gradient-to-b from-transparent via-primary/30 to-transparent z-10"></div>
+      
       {/* Input Panel */}
-      <Card className="p-6 bg-canvas border-canvas-border shadow-soft">
-        <div className="space-y-4">
+      <Card className="p-6 bg-canvas border-canvas-border shadow-soft relative overflow-hidden">
+        {/* Mystical corner decorations */}
+        <div className="absolute top-2 left-2 text-xs opacity-20">✧</div>
+        <div className="absolute top-2 right-2 text-xs opacity-20">✧</div>
+        <div className="absolute bottom-2 left-2 text-xs opacity-20">✧</div>
+        <div className="absolute bottom-2 right-2 text-xs opacity-20">✧</div>
+        
+        <div className="space-y-4 relative">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold text-foreground">输入日志</h2>
-            <Button variant="soft" size="sm" onClick={clearAll}>
+            <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
+              <span>📝</span>
+              輸入神話日誌
+              <span>🌙</span>
+            </h2>
+            <Button variant="soft" size="sm" onClick={clearAll} className="flex items-center gap-1">
               <Trash2 size={16} />
+              <span>🔥</span>
               清空
             </Button>
           </div>
           
-          <Textarea 
-            placeholder="请输入跑团记录内容..."
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-            className="min-h-[300px] bg-editor border-editor-border resize-none font-mono text-sm"
-          />
+          <div className="relative">
+            <div className="absolute -inset-1 bg-gradient-primary/10 rounded-lg blur-sm"></div>
+            <Textarea 
+              placeholder="請輸入桌上角色扮演遊戲記錄內容... 📖✨"
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              className="min-h-[300px] bg-editor border-editor-border resize-none font-mono text-sm relative"
+            />
+          </div>
           
           <div className="space-y-3">
-            <h3 className="text-sm font-medium text-muted-foreground">格式化选项</h3>
+            <h3 className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+              <span>🔮</span>
+              神祕格式化選項
+              <span>✨</span>
+            </h3>
             <div className="flex flex-wrap gap-2">
               {categories.map((category) => (
                 <CategoryButton
@@ -123,45 +145,65 @@ export function LogCanvas({}: LogCanvasProps) {
             </div>
           </div>
           
-          <Button 
-            variant="canvas" 
-            size="lg" 
-            onClick={processLog}
-            className="w-full"
-            disabled={!inputText.trim()}
-          >
-            <Eye size={16} />
-            预览格式化
-          </Button>
+          <div className="relative">
+            <div className="absolute -inset-1 bg-gradient-primary/20 rounded-lg blur-sm"></div>
+            <Button 
+              variant="canvas" 
+              size="lg" 
+              onClick={processLog}
+              className="w-full relative flex items-center gap-2"
+              disabled={!inputText.trim()}
+            >
+              <Eye size={16} />
+              <span>🔍</span>
+              預覽神聖格式化
+              <span>⚡</span>
+            </Button>
+          </div>
         </div>
       </Card>
 
       {/* Output Panel */}
-      <Card className="p-6 bg-canvas border-canvas-border shadow-soft">
-        <div className="space-y-4">
+      <Card className="p-6 bg-canvas border-canvas-border shadow-soft relative overflow-hidden">
+        {/* Mystical corner decorations */}
+        <div className="absolute top-2 left-2 text-xs opacity-20">✦</div>
+        <div className="absolute top-2 right-2 text-xs opacity-20">✦</div>
+        <div className="absolute bottom-2 left-2 text-xs opacity-20">✦</div>
+        <div className="absolute bottom-2 right-2 text-xs opacity-20">✦</div>
+        
+        <div className="space-y-4 relative">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold text-foreground">格式化结果</h2>
+            <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
+              <span>📜</span>
+              神聖格式化結果
+              <span>✨</span>
+            </h2>
             <div className="flex gap-2">
-              <Button variant="soft" size="sm" onClick={copyOutput} disabled={!processedOutput}>
+              <Button variant="soft" size="sm" onClick={copyOutput} disabled={!processedOutput} className="flex items-center gap-1">
                 <Copy size={16} />
-                复制
+                <span>📋</span>
+                複製
               </Button>
-              <Button variant="outline" size="sm" disabled={!processedOutput}>
+              <Button variant="outline" size="sm" disabled={!processedOutput} className="flex items-center gap-1">
                 <Download size={16} />
-                导出
+                <span>💾</span>
+                導出
               </Button>
             </div>
           </div>
           
-          <div className="bg-editor border border-editor-border rounded-md p-4 min-h-[300px]">
+          <div className="bg-editor border border-editor-border rounded-md p-4 min-h-[300px] relative">
+            <div className="absolute top-1 right-1 text-xs opacity-20">🌟</div>
             {processedOutput ? (
               <div 
                 className="text-sm font-mono whitespace-pre-wrap"
                 dangerouslySetInnerHTML={{ __html: processedOutput }}
               />
             ) : (
-              <div className="text-muted-foreground text-sm text-center py-12">
-                处理后的日志内容将在此显示
+              <div className="text-muted-foreground text-sm text-center py-12 flex flex-col items-center gap-2">
+                <span className="text-2xl opacity-50">🔮</span>
+                <p>處理後的神聖日誌內容將在此顯示</p>
+                <span className="text-xl opacity-30">✨📖✨</span>
               </div>
             )}
           </div>
