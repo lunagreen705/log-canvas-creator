@@ -3,16 +3,29 @@ import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { CategoryButton } from "@/components/CategoryButton";
-import { Copy, Download, Trash2, Eye, Code, MessageSquare, Clock, Dice6, Image } from "lucide-react";
-import { useState } from "react";
+import { Copy, Download, Trash2, Eye, Code, MessageSquare, Clock, Dice6, Image, ExternalLink } from "lucide-react";
+import { useState, useEffect } from "react";
 import { toast } from "@/hooks/use-toast";
 
-interface LogCanvasProps {}
+interface LogCanvasProps {
+  preloadedContent?: string;
+}
 
-export function LogCanvas({}: LogCanvasProps) {
+export function LogCanvas({ preloadedContent = "" }: LogCanvasProps) {
   const [inputText, setInputText] = useState("");
   const [activeCategories, setActiveCategories] = useState<string[]>([]);
   const [processedOutput, setProcessedOutput] = useState("");
+
+  // 當有預載內容時自動填入
+  useEffect(() => {
+    if (preloadedContent) {
+      setInputText(preloadedContent);
+      toast({
+        title: "📖 已載入外部日誌",
+        description: "來自 Discord Bot 的日誌內容已自動填入",
+      });
+    }
+  }, [preloadedContent]);
 
   const categories = [
     { id: "online", name: "🖼️ 線上圖片", icon: <Image size={16} />, color: "online" as const },
@@ -76,6 +89,20 @@ export function LogCanvas({}: LogCanvasProps) {
         variant: "destructive",
       });
     }
+  };
+
+  const openInViewer = () => {
+    if (!processedOutput) return;
+    
+    const encodedContent = btoa(encodeURIComponent(processedOutput));
+    const timestamp = Date.now();
+    const viewerUrl = `/#/log/${timestamp}?data=${encodedContent}&name=格式化日誌`;
+    
+    window.open(viewerUrl, '_blank');
+    toast({
+      title: "🚀 已開啟查看器",
+      description: "格式化結果已在新頁面中開啟",
+    });
   };
 
   const clearAll = () => {
@@ -183,6 +210,11 @@ export function LogCanvas({}: LogCanvasProps) {
                 <Copy size={16} />
                 <span>📋</span>
                 複製
+              </Button>
+              <Button variant="outline" size="sm" onClick={openInViewer} disabled={!processedOutput} className="flex items-center gap-1">
+                <ExternalLink size={16} />
+                <span>🚀</span>
+                查看器
               </Button>
               <Button variant="outline" size="sm" disabled={!processedOutput} className="flex items-center gap-1">
                 <Download size={16} />

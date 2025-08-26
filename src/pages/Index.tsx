@@ -1,8 +1,25 @@
 
 import { LogCanvas } from "@/components/LogCanvas";
 import trpgLogo from "@/assets/trpg-logo.png";
+import { useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const Index = () => {
+  const [searchParams] = useSearchParams();
+  const [preloadedContent, setPreloadedContent] = useState<string>("");
+
+  useEffect(() => {
+    // 檢查是否有預載的日誌內容
+    const encodedData = searchParams.get('data');
+    if (encodedData) {
+      try {
+        const decodedContent = decodeURIComponent(atob(encodedData));
+        setPreloadedContent(decodedContent);
+      } catch (error) {
+        console.error('解析預載日誌內容時發生錯誤:', error);
+      }
+    }
+  }, [searchParams]);
   return (
     <div className="min-h-screen bg-gradient-canvas relative overflow-hidden">
       {/* Mystical background elements */}
@@ -70,7 +87,7 @@ const Index = () => {
           </div>
         </div>
         
-        <LogCanvas />
+        <LogCanvas preloadedContent={preloadedContent} />
       </main>
 
       {/* Footer */}
