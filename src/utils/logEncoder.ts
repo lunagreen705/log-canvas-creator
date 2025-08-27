@@ -14,7 +14,33 @@ export function encodeLogContent(content: string): string {
 }
 
 /**
- * 生成日誌查看器連結
+ * 生成日誌編輯器連結 (主頁面，用於編輯和格式化)
+ * @param baseUrl - 網站基本 URL (例如: https://yoursite.lovable.app)
+ * @param logName - 日誌名稱
+ * @param content - 日誌內容
+ * @param guildId - Discord 伺服器 ID (可選)
+ * @returns 完整的編輯器連結
+ */
+export function generateLogEditorUrl(
+  baseUrl: string,
+  logName: string,
+  content: string,
+  guildId?: string
+): string {
+  const encodedContent = encodeLogContent(content);
+  const encodedName = encodeURIComponent(logName);
+  
+  let url = `${baseUrl}/?data=${encodedContent}&name=${encodedName}`;
+  
+  if (guildId) {
+    url += `&guild=${guildId}`;
+  }
+  
+  return url;
+}
+
+/**
+ * 生成日誌查看器連結 (僅查看，不可編輯)
  * @param baseUrl - 網站基本 URL (例如: https://yoursite.lovable.app)
  * @param logName - 日誌名稱
  * @param content - 日誌內容
@@ -68,9 +94,9 @@ function generateRendererLink(baseUrl, logName, content, guildId) {
   
   const encodedContent = encodeLogContent(content);
   const encodedName = encodeURIComponent(logName);
-  const timestamp = Date.now();
   
-  let url = \`\${baseUrl}/#/log/\${timestamp}?data=\${encodedContent}&name=\${encodedName}\`;
+  // 生成編輯器連結 (主頁面) - 讓用戶可以格式化和導出
+  let url = \`\${baseUrl}/?data=\${encodedContent}&name=\${encodedName}\`;
   
   if (guildId) {
     url += \`&guild=\${guildId}\`;
@@ -100,8 +126,8 @@ async function handleHalt(source, generateLink) {
     publicEmbed = new EmbedBuilder()
       .setColor('Gold')
       .setTitle('🔚 日誌已停止並上傳')
-      .setDescription(\`日誌 **\${logNameToHalt}** 已停止記錄並上傳至渲染器。\`)
-      .addFields({ name: '🌐 渲染器連結', value: \`[📖 點此查看格式化日誌](\${link})\` });
+      .setDescription(\`日誌 **\${logNameToHalt}** 已停止記錄並上傳至編輯器。\`)
+      .addFields({ name: '📝 編輯器連結', value: \`[✨ 點此格式化並導出日誌](\${link})\` });
   } else {
     await trpgSessionLogCollection.updateOne({ guildId, logName: logNameToHalt }, { $set: { content: finalContent } });
     publicEmbed = new EmbedBuilder().setColor('Orange').setTitle('⏹️ 日誌已停止').setDescription(\`日誌 **\${logNameToHalt}** 已停止記錄。\`);
@@ -118,6 +144,7 @@ async function handleHalt(source, generateLink) {
 
 export default {
   encodeLogContent,
+  generateLogEditorUrl,
   generateLogViewerUrl,
   decodeLogContent,
   discordBotIntegrationCode

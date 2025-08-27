@@ -17,9 +17,9 @@ function encodeLogContent(content) {
 function generateRendererLink(baseUrl, logName, content, guildId) {
   const encodedContent = encodeLogContent(content);
   const encodedName = encodeURIComponent(logName);
-  const timestamp = Date.now();
   
-  let url = `${baseUrl}/#/log/${timestamp}?data=${encodedContent}&name=${encodedName}`;
+  // 生成編輯器連結 (主頁面) - 讓用戶可以格式化和導出
+  let url = `${baseUrl}/?data=${encodedContent}&name=${encodedName}`;
   
   if (guildId) {
     url += `&guild=${guildId}`;
@@ -54,10 +54,10 @@ async function handleHalt(source, generateLink) {
         publicEmbed = new EmbedBuilder()
             .setColor('Gold')
             .setTitle('🔚 日誌已停止並上傳')
-            .setDescription(`日誌 **${logNameToHalt}** 已停止記錄並上傳至渲染器。`)
+            .setDescription(`日誌 **${logNameToHalt}** 已停止記錄並上傳至編輯器。`)
             .addFields({ 
-                name: '🌐 渲染器連結', 
-                value: `[📖 點此查看格式化日誌](${link})`,
+                name: '📝 編輯器連結', 
+                value: `[✨ 點此格式化並導出日誌](${link})`,
                 inline: false
             });
     } else {
@@ -98,12 +98,12 @@ async function handleGet(source, logName) {
         await trpgSessionLogCollection.updateOne({ guildId, logName }, { $set: { rendererLink: link } });
         
         await source.interaction.editReply({ 
-            content: `這是日誌 \\`${logName}\\` 的渲染器連結：\\n📖 ${link}`, 
+            content: `這是日誌 \\`${logName}\\` 的編輯器連結：\\n✨ ${link}`, 
             ephemeral: true 
         });
     } else {
         await source.interaction.editReply({ 
-            content: `這是日誌 \\`${logName}\\` 的渲染器連結：\\n📖 ${logData.rendererLink}`, 
+            content: `這是日誌 \\`${logName}\\` 的編輯器連結：\\n✨ ${logData.rendererLink}`, 
             ephemeral: true 
         });
     }
